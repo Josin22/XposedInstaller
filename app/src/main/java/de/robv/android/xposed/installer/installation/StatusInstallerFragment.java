@@ -114,7 +114,7 @@ public class StatusInstallerFragment extends Fragment {
         refreshKnownIssue(v);
 
         // Display warning dialog to new users
-        if (!XposedApp.getPreferences().getBoolean("hide_install_warning", false)) {
+        if (false && !XposedApp.getPreferences().getBoolean("hide_install_warning", false)) {
             new MaterialDialog.Builder(getActivity())
                     .title(R.string.install_warning_title)
                     .content(R.string.install_warning)
