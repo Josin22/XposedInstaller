@@ -267,7 +267,7 @@ public class StatusInstallerFragment extends Fragment {
         final InstallZipUtil.XposedProp prop = XposedApp.getXposedProp();
         final Set<String> missingFeatures = prop != null ? prop.getMissingInstallerFeatures() : null;
 
-        if (missingFeatures != null && !missingFeatures.isEmpty()) {
+        if (false && missingFeatures != null && !missingFeatures.isEmpty()) {
             InstallZipUtil.reportMissingFeatures(missingFeatures);
             issueName = getString(R.string.installer_needs_update, getString(R.string.app_name));
             issueLink = getString(R.string.about_support);
@@ -280,12 +280,12 @@ public class StatusInstallerFragment extends Fragment {
         } else if (Build.VERSION.SDK_INT < 24 && new File("/system/framework/twframework.jar").exists()) {
             issueName = "Samsung TouchWiz ROM";
             issueLink = "https://forum.xda-developers.com/showthread.php?t=3034811";
-        } else if (!baseDirCanonical.equals(baseDirActualCanonical)) {
+        } else if (false && !baseDirCanonical.equals(baseDirActualCanonical)) {
             Log.e(XposedApp.TAG, "Base directory: " + getPathWithCanonicalPath(baseDir, baseDirCanonical));
             Log.e(XposedApp.TAG, "Expected: " + getPathWithCanonicalPath(baseDirActual, baseDirActualCanonical));
             issueName = getString(R.string.known_issue_wrong_base_directory, getPathWithCanonicalPath(baseDirActual, baseDirActualCanonical));
             issueLink = "https://github.com/rovo89/XposedInstaller/issues/395";
-        } else if (!baseDir.exists()) {
+        } else if (false && !baseDir.exists()) {
             issueName = getString(R.string.known_issue_missing_base_directory);
             issueLink = "https://github.com/rovo89/XposedInstaller/issues/393";
         } else {
