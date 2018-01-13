@@ -117,6 +117,12 @@ public class ModulesFragment extends ListFragment implements ModuleListener {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        ModuleUtil.getInstance().reloadInstalledModules();
+    }
+
+    @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
