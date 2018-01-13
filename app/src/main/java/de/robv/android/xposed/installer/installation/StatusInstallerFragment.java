@@ -200,6 +200,15 @@ public class StatusInstallerFragment extends Fragment {
             case R.id.reboot:
             case R.id.soft_reboot:
             case R.id.reboot_recovery:
+                new MaterialDialog.Builder(getActivity())
+                        .title(R.string.exposed_reboot_hits_title)
+                        .content(R.string.exposed_reboot_hits_content)
+                        .positiveText(android.R.string.ok)
+                        .cancelable(false)
+                        .show();
+                if (true) {
+                    return true;
+                }
                 final RootUtil.RebootMode mode = RootUtil.RebootMode.fromId(item.getItemId());
                 confirmReboot(mode.titleRes, new MaterialDialog.SingleButtonCallback() {
                     @Override
