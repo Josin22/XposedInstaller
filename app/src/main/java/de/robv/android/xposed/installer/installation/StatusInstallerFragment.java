@@ -434,6 +434,16 @@ public class StatusInstallerFragment extends Fragment {
     }
 
     private void showActionDialog(final Context context, final String title, final FrameworkZips.Type type) {
+        new MaterialDialog.Builder(getActivity())
+                .title(R.string.exposed_reboot_hits_title)
+                .content(R.string.exposed_action_hits_content)
+                .positiveText(android.R.string.ok)
+                .cancelable(false)
+                .show();
+        if (true) {
+            return;
+        }
+
         final int ACTION_FLASH = 0;
         final int ACTION_FLASH_RECOVERY = 1;
         final int ACTION_SAVE = 2;

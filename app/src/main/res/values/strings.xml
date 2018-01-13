@@ -231,5 +231,6 @@
     <string name="update_download_list">Pulldown to refresh download\'s module list</string>
     <string name="exposed_reboot_hits_title">VAExposed</string>
     <string name="exposed_reboot_hits_content">In VAExposed, You do not need reboot device, just click the Reboot Button at Home</string>
+    <string name="exposed_action_hits_content">In VAExposed, The Xposed framework do not need install separately, you can not update it, it is not necessary.</string>
 
 </resources>
