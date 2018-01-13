@@ -352,6 +352,9 @@ public class StatusInstallerFragment extends Fragment {
     private void refreshZipViews(View view) {
         LinearLayout zips = (LinearLayout) view.findViewById(R.id.zips);
         zips.removeAllViews();
+        if (true) {
+            return;
+        }
         TextView tvError = (TextView) view.findViewById(R.id.zips_load_error);
         synchronized (FrameworkZips.class) {
             boolean hasZips = false;
