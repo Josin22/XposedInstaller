@@ -101,6 +101,8 @@ public class StatusInstallerFragment extends Fragment {
             }
         });
 
+        disableSwitch.setVisibility(View.GONE);
+
         // Device info
         TextView androidSdk = (TextView) v.findViewById(R.id.android_version);
         TextView manufacturer = (TextView) v.findViewById(R.id.ic_manufacturer);
