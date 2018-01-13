@@ -232,5 +232,5 @@
     <string name="exposed_reboot_hits_title">VAExposed</string>
     <string name="exposed_reboot_hits_content">In VAExposed, You do not need reboot device, just click the Reboot Button at Home</string>
     <string name="exposed_action_hits_content">In VAExposed, The Xposed framework do not need install separately, you can not update it, it is not necessary.</string>
-
+    <string name="exposed_module_change_hits">module will take effect after Settings->Reboot!</string>
 </resources>

@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v13.app.FragmentCompat;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.ActionBar;
@@ -509,6 +510,7 @@ public class ModulesFragment extends ListFragment implements ModuleListener {
                         String packageName = (String) buttonView.getTag();
                         boolean changed = mModuleUtil.isModuleEnabled(packageName) ^ isChecked;
                         if (changed) {
+                            Toast.makeText(buttonView.getContext(), R.string.exposed_module_change_hits, Toast.LENGTH_SHORT).show();
                             mModuleUtil.setModuleEnabled(packageName, isChecked);
                             mModuleUtil.updateModulesList(true);
                         }

@@ -186,4 +186,5 @@
     <string name="loading">载入中…</string>
     <string name="exposed_reboot_hits_content">在VAExposed中，您不需要重启手机就能使用Xposed！直接在主界面右上角菜单中点击重启按钮即可！</string>
     <string name="exposed_action_hits_content">VAExposed中自带Xposed框架，您无需单独安装或者升级它，也没有这个必要。</string>
+    <string name="exposed_module_change_hits">勾选模块之后，需要在主界面右上角按钮 -> 重启 才能生效哦～</string>
 </resources>
