@@ -3,6 +3,7 @@ package de.robv.android.xposed.installer.installation;
 import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.graphics.Color;
@@ -32,6 +33,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.util.Set;
 
 import de.robv.android.xposed.installer.R;
@@ -111,6 +113,8 @@ public class StatusInstallerFragment extends Fragment {
         androidSdk.setText(getString(R.string.android_sdk, Build.VERSION.RELEASE, getAndroidVersion(), Build.VERSION.SDK_INT));
         manufacturer.setText(getUIFramework());
         cpu.setText(FrameworkZips.ARCH);
+
+        determineVerifiedBootState(v);
 
         // Known issues
         refreshKnownIssue(v);
@@ -192,6 +196,9 @@ public class StatusInstallerFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_installer, menu);
         menu.findItem(R.id.show_outdated).setChecked(mShowOutdated);
+        if (Build.VERSION.SDK_INT < 26) {
+            menu.findItem(R.id.dexopt_now).setVisible(false);
+        }
     }
 
     @Override
@@ -216,6 +223,40 @@ public class StatusInstallerFragment extends Fragment {
                         RootUtil.reboot(mode, getActivity());
                     }
                 });
+                return true;
+
+            case R.id.dexopt_now:
+                new MaterialDialog.Builder(getActivity())
+                        .title(R.string.dexopt_now)
+                        .content(R.string.this_may_take_a_while)
+                        .progress(true, 0)
+                        .cancelable(false)
+                        .showListener(new DialogInterface.OnShowListener() {
+                            @Override
+                            public void onShow(final DialogInterface dialog) {
+                                new Thread("dexopt") {
+                                    @Override
+                                    public void run() {
+                                        RootUtil rootUtil = new RootUtil();
+                                        if (!rootUtil.startShell()) {
+                                            dialog.dismiss();
+                                            NavUtil.showMessage(getActivity(), getString(R.string.root_failed));
+                                            return;
+                                        }
+
+                                        rootUtil.execute("cmd package bg-dexopt-job", null);
+
+                                        dialog.dismiss();
+                                        XposedApp.runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                Toast.makeText(getActivity(), R.string.done, Toast.LENGTH_LONG).show();
+                                            }
+                                        });
+                                    }
+                                }.start();
+                            }
+                        }).show();
                 return true;
 
             case R.id.show_outdated:
@@ -346,6 +387,34 @@ public class StatusInstallerFragment extends Fragment {
             manufacturer += new File("/system/framework/framework-miui-res.apk").exists() ? "(MIUI)" : "(AOSP-based ROM)";
         }
         return manufacturer;
+    }
+
+    private void determineVerifiedBootState(View v) {
+        try {
+            Class<?> c = Class.forName("android.os.SystemProperties");
+            Method m = c.getDeclaredMethod("get", String.class, String.class);
+            m.setAccessible(true);
+
+            String propSystemVerified = (String) m.invoke(null, "partition.system.verified", "0");
+            String propState = (String) m.invoke(null, "ro.boot.verifiedbootstate", "");
+            File fileDmVerityModule = new File("/sys/module/dm_verity");
+
+            boolean verified = !propSystemVerified.equals("0");
+            boolean detected = !propState.isEmpty() || fileDmVerityModule.exists();
+
+            TextView tv = v.findViewById(R.id.dmverity);
+            if (verified) {
+                tv.setText(R.string.verified_boot_active);
+                tv.setTextColor(getResources().getColor(R.color.warning));
+            } else if (detected) {
+                tv.setText(R.string.verified_boot_deactivated);
+                v.findViewById(R.id.dmverity_explanation).setVisibility(View.GONE);
+            } else {
+                v.findViewById(R.id.dmverity_row).setVisibility(View.GONE);
+            }
+        } catch (Exception e) {
+            Log.e(XposedApp.TAG, "Could not detect Verified Boot state", e);
+        }
     }
 
     @UiThread
