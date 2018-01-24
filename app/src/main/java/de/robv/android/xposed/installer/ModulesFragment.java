@@ -511,7 +511,7 @@ public class ModulesFragment extends ListFragment implements ModuleListener {
                         if (changed) {
                             Toast.makeText(buttonView.getContext(), R.string.exposed_module_change_hits, Toast.LENGTH_SHORT).show();
                             mModuleUtil.setModuleEnabled(packageName, isChecked);
-                            mModuleUtil.updateModulesList(true);
+                            mModuleUtil.updateModulesList(false);
                         }
                     }
                 });
