@@ -114,7 +114,7 @@ public class StatusInstallerFragment extends Fragment {
         manufacturer.setText(getUIFramework());
         cpu.setText(FrameworkZips.ARCH);
 
-        determineVerifiedBootState(v);
+        // determineVerifiedBootState(v);
 
         // Known issues
         refreshKnownIssue(v);
