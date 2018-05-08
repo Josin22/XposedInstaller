@@ -74,7 +74,11 @@ public class WelcomeActivity extends XposedBaseActivity implements NavigationVie
         mSelectedId = mNavigationView.getMenu().getItem(prefs.getInt("default_view", 0)).getItemId();
         mSelectedId = savedInstanceState == null ? mSelectedId : savedInstanceState.getInt(SELECTED_ITEM_ID);
         mPrevSelectedId = mSelectedId;
-        mNavigationView.getMenu().findItem(mSelectedId).setChecked(true);
+        MenuItem item = mNavigationView.getMenu().findItem(mSelectedId);
+        if (item != null) {
+            item.setChecked(true);
+        }
+
 
         if (savedInstanceState == null) {
             mDrawerHandler.removeCallbacksAndMessages(null);
@@ -107,15 +111,19 @@ public class WelcomeActivity extends XposedBaseActivity implements NavigationVie
     }
 
     public void switchFragment(int itemId) {
-        mSelectedId = mNavigationView.getMenu().getItem(itemId).getItemId();
-        mNavigationView.getMenu().findItem(mSelectedId).setChecked(true);
-        mDrawerHandler.removeCallbacksAndMessages(null);
-        mDrawerHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                navigate(mSelectedId);
-            }
-        }, 250);
+        int currentId = mNavigationView.getMenu().getItem(itemId).getItemId();
+        MenuItem item = mNavigationView.getMenu().findItem(currentId);
+        if (item != null) {
+            mSelectedId = currentId;
+            item.setChecked(true);
+            mDrawerHandler.removeCallbacksAndMessages(null);
+            mDrawerHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    navigate(mSelectedId);
+                }
+            }, 250);
+        }
         mDrawerLayout.closeDrawers();
     }
 
