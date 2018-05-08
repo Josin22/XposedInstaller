@@ -220,6 +220,10 @@ public class RepoLoader extends OnlineLoader<RepoLoader> {
         final AtomicInteger insertCounter = new AtomicInteger();
         final AtomicInteger deleteCounter = new AtomicInteger();
 
+        if (mRepositories == null) {
+            return false;
+        }
+
         for (Entry<Long, Repository> repoEntry : mRepositories.entrySet()) {
             final long repoId = repoEntry.getKey();
             final Repository repo = repoEntry.getValue();
