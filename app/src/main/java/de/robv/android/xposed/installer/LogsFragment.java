@@ -176,13 +176,17 @@ public class LogsFragment extends Fragment {
     }
 
     private void send() {
-        Uri uri = FileProvider.getUriForFile(getActivity(), "de.robv.android.xposed.installer.fileprovider", mFileErrorLog);
-        Intent sendIntent = new Intent();
-        sendIntent.setAction(Intent.ACTION_SEND);
-        sendIntent.putExtra(Intent.EXTRA_STREAM, uri);
-        sendIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        sendIntent.setType("application/html");
-        startActivity(Intent.createChooser(sendIntent, getResources().getString(R.string.menuSend)));
+        try {
+            Uri uri = FileProvider.getUriForFile(getActivity(), "de.robv.android.xposed.installer.fileprovider", mFileErrorLog);
+            Intent sendIntent = new Intent();
+            sendIntent.setAction(Intent.ACTION_SEND);
+            sendIntent.putExtra(Intent.EXTRA_STREAM, uri);
+            sendIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            sendIntent.setType("application/html");
+            startActivity(Intent.createChooser(sendIntent, getResources().getString(R.string.menuSend)));
+        } catch (Throwable e) {
+            // TODO, this just make it not crash, it can not works well now.
+        }
     }
 
     @Override
