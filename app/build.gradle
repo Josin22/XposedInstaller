@@ -2,16 +2,28 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 27
-
+    signingConfigs {
+        release {
+            storeFile file("release_xp_keystore.jks")
+            storePassword "123456"
+            keyAlias "key0"
+            keyPassword "123456"
+        }
+    }
     defaultConfig {
-        applicationId "de.robv.android.xposed.installer"
+        applicationId "de.robv.android.xposed.installer.self"
         minSdkVersion 15
         targetSdkVersion 25
         versionCode 43
         versionName "3.1.5"
         archivesBaseName = "XposedInstaller_${versionName}".replace(' ', '_')
     }
-
+    lintOptions {
+        checkReleaseBuilds false
+        // Or, if you prefer, you can continue to check for errors in release builds,
+        // but continue the build even when errors are found:
+        abortOnError false
+    }
     buildTypes {
         release {
             minifyEnabled true

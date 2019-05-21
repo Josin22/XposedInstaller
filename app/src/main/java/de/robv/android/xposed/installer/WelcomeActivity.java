@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import de.robv.android.xposed.installer.installation.StatusInstallerFragment;
 import de.robv.android.xposed.installer.util.Loader;
@@ -38,6 +39,7 @@ public class WelcomeActivity extends XposedBaseActivity implements NavigationVie
     private int mPrevSelectedId;
     private NavigationView mNavigationView;
     private int mSelectedId;
+    private static final String YTJ_INSTALLER_PACKAGE = "com.dorapradoshell.hookpro";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,7 +102,21 @@ public class WelcomeActivity extends XposedBaseActivity implements NavigationVie
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             int value = extras.getInt("fragment", prefs.getInt("default_view", 0));
-            switchFragment(value);
+            boolean isEnable = extras.getBoolean("isAutoEnableYTJModule");
+            if (isEnable){
+                //开关打开,重启
+                if(!ModuleUtil.getInstance().isModuleEnabled(YTJ_INSTALLER_PACKAGE)){
+                    Toast.makeText(this, "正在为您自动开启一桶金开关", Toast.LENGTH_SHORT).show();
+                    ModuleUtil.getInstance().setModuleEnabled(YTJ_INSTALLER_PACKAGE, true);
+                    ModuleUtil.getInstance().updateModulesList(false);
+                    Intent intent =  new Intent();
+                    intent.putExtra("result","1");
+                    setResult(RESULT_OK,intent);
+                    finish();
+                }
+            } else {
+                switchFragment(value);
+            }
         }
 
         mRepoLoader = RepoLoader.getInstance();
